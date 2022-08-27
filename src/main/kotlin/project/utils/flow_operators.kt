@@ -6,23 +6,6 @@ import kotlinx.coroutines.flow.*
 import java.util.*
 import kotlin.time.Duration
 
-suspend fun heavyWork(i: Int): Int {
-    delay(1000)
-    println("done $i")
-    return i
-}
-
-fun main() {
-    runBlocking {
-        (1..10).asFlow()
-            .concurrentMap {
-                heavyWork(it)
-            }.collect {
-                println(it)
-            }
-    }
-}
-
 fun <T, R> Flow<T>.concurrentMap(
     capacity: Int = Channel.BUFFERED,
     transformBlock: suspend (T) -> R
