@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 import project.extra.v2ray.util.AngConfigManager
+import project.server.startServer
 import project.utils.concurrentMapSecond
 import project.utils.mapSecond
 import java.io.File
@@ -16,11 +17,14 @@ fun main(args: Array<String>) = runBlocking<Unit> {
 ****** V2Ray Configs Checker ******
 """.trimIndent()
     )
+    val argParser = ArgParser(args)
+    if (argParser.has("-server")) {
+        startServer()
+        return@runBlocking
+    }
     val filePath = args.lastOrNull()?.takeIf {
         !it.startsWith("-")
     }
-    val argParser = ArgParser(args)
-
     val maxConcurrent = argParser["--concurrent"]?.toIntOrNull() ?: 120
     val outputPath = argParser["--output"]
     val asJson = argParser.has("-json")
